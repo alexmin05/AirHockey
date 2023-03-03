@@ -20,9 +20,19 @@ public class AirHockey implements KeyListener, MouseListener, MouseMotionListene
     public Image puckPic;
     public Image paddlePic;
 
+    public Button button1;
+
+    public boolean gameStart = false;
+
+    public int usertopuckdistance;
+    public int xcenterofuser;
+    public int ycenterofuser;
+    public int xcenterofpuck;
+    public int ycenterofpuck;
+    public int mouseX, mouseY;
+
     public Puck thePuck;
-    public Player user1;
-    public Player user2;
+    public Player[] users;
 
     public static void main(String[] args) {
         AirHockey myApp = new AirHockey();
@@ -36,16 +46,33 @@ public class AirHockey implements KeyListener, MouseListener, MouseMotionListene
         canvas.addMouseListener(this);
         canvas.addMouseMotionListener(this);
 
-        thePuck = new Puck(500, 350, 0, 0, puckPic);
-        user1 = new Player(250, 250, 10, 10, paddlePic);
-        user2 = new Player(750, 250, 10, 10, paddlePic);
+        puckPic = Toolkit.getDefaultToolkit().getImage("puckPic.png");
+        paddlePic = Toolkit.getDefaultToolkit().getImage("paddlePic.png");
 
+        button1 = new Button(300, 300, 150, 70, "Click Here to Start");
+
+        thePuck = new Puck(500, 350, 0,0, puckPic);
+        users = new Player[2];
+        for (int x = 0; x < users.length; x = x + 1) {
+            users[x] = new Player(100 + x*500, 350, 10, 10, paddlePic);
+        }
+
+       for (int x = 0; x < users.length; x = x + 1) {
+           xcenterofuser = users[x].xpos + users[x].width / 2;
+           ycenterofuser = users[x].ypos + users[x].height / 4;
+           xcenterofpuck = thePuck.xpos + thePuck.width / 2;
+           ycenterofpuck = thePuck.ypos + thePuck.height / 2;
+           usertopuckdistance = Math.sqrt(Math.pow(xcenterofuser - thePuck.xpos, 2) + Math.pow(ycenterofuser - thePuck.ypos, 2));
+           if (usertopuckdistance = users[x].width / 2 + thePuck.width / 2) {
+
+           }
+       }
     }
 
     public void moveThings() {
         thePuck.puckmove();
-        user1.move1();
-        user2.move2();
+        users[0].move2();
+        users[1].move1();
     }
 
     public void checkIntersections() {
@@ -65,71 +92,81 @@ public class AirHockey implements KeyListener, MouseListener, MouseMotionListene
         Graphics2D g = (Graphics2D) bufferStrategy.getDrawGraphics();
         g.clearRect(0, 0, WIDTH, HEIGHT);
 
-        g.drawImage(thePuck.pic, thePuck.xpos, thePuck.ypos, thePuck.width, thePuck.height, null);
-        g.drawImage(user1.pic, user1.xpos, user1.ypos, user1.width, user1.height, null);
-        g.drawImage(user2.pic, user2.xpos, user2.ypos, user2.width, user2.height, null);
-
+        if (gameStart == false) {
+            g.setColor(Color.BLUE);
+        g.fillRect(0, 0, WIDTH, HEIGHT);
+        g.setColor(Color.YELLOW);
+        g.drawString("Are you ready to see who is the ultimate Air Hockey champion?", 500, 350);
+        }
+        else {
+            g.drawImage(thePuck.pic, thePuck.xpos, thePuck.ypos, thePuck.width / 2, thePuck.height / 2, null);
+            for (int x = 0; x < users.length; x++) {
+                g.drawImage(users[x].pic, users[x].xpos, users[x].ypos, users[x].width, users[x].height / 2, null);
+            }
+        }
         g.dispose();
         bufferStrategy.show();
-    }
+}
 
     public void keyPressed(KeyEvent event) {
         char key = event.getKeyChar();
         int keyCode = event.getKeyCode();
         System.out.println("Key Pressed: " + key + "  Code: " + keyCode);
 
-        if (keyCode == 37) { // left
-            user1.left = true;
-        }
-        if (keyCode == 38) { // up
-            user1.up = true;
-        }
-        if (keyCode == 39) { // right
-            user1.right = true;
-        }
-        if (keyCode == 40) { // down
-            user1.down = true;
-        }
         if (keyCode == 65) { // a
-            user2.up = true;
+            users[0].left = true;
         }
         if (keyCode == 68) { // d
-            user2.right = true;
+            users[0].right = true;
         }
         if (keyCode == 83) { // s
-            user2.down = true;
+            users[0].down = true;
         }
         if (keyCode == 87) { // w
-            user2.up = true;
+            users[0].up = true;
         }
+        if (keyCode == 37) {
+            users[1].left2 = true;
+        }
+        if (keyCode == 38) {
+            users[1].up2 = true;
+        }
+        if (keyCode == 39) {
+            users[1].right2 = true;
+        }
+        if (keyCode == 40) {
+            users[1].down2 = true;
+        }
+
+
     }
 
     public void keyReleased(KeyEvent event) {
         char key = event.getKeyChar();
         int keyCode = event.getKeyCode();
+        if (keyCode == 65) {
+            users[0].left = false;
+        }
+        if (keyCode == 68) {
+            users[0].right = false;
+        }
+        if (keyCode == 83) {
+            users[0].down = false;
+        }
+        if (keyCode == 87) {
+            users[0].up = false;
+        }
         if (keyCode == 37) {
-            user1.left = false;
+            users[1].left2 = false;
         }
         if (keyCode == 38) {
-            user1.up = false;
+            users[1].up2 = false;
         }
         if (keyCode == 39) {
-            user1.right = false;
+            users[1].right2 = false;
         }
         if (keyCode == 40) {
-            user1.down = false;
-        }
-        if (keyCode == 65) { // a
-            user2.up = false;
-        }
-        if (keyCode == 68) { // d
-            user2.right = false;
-        }
-        if (keyCode == 83) { // s
-            user2.down = false;
-        }
-        if (keyCode == 87) { // w
-            user2.up = false;
+            users[1].down2 = false;
         }
 
     }
@@ -138,31 +175,33 @@ public class AirHockey implements KeyListener, MouseListener, MouseMotionListene
     }
 
     public void mouseClicked(MouseEvent e) {
+        int x, y;
+        x = e.getX();
+        y = e.getY();
 
+        mouseX = x;
+        mouseY = y;
+
+        if (button1.rec.contains(x, y)) {
+            System.out.println("TIMER STARTED");
+            startTime = System.currentTimeMillis();
+            startTimer = true;
+        }
     }
 
     public void mousePressed(MouseEvent e) {
-        System.out.println();
-        System.out.println("Mouse Button Pressed");
     }
 
     public void mouseReleased(MouseEvent e) {
-        System.out.println();
-        System.out.println("Mouse Button Released");
     }
 
     public void mouseEntered(MouseEvent e) {
-        System.out.println();
-        System.out.println("Mouse has entered the window");
     }
 
     public void mouseExited(MouseEvent e) {
-        System.out.println();
-        System.out.println("Mouse has left the window");
     }
 
     public void mouseDragged(MouseEvent e) {
-        System.out.println("Mouse is being dragged");
     }
 
     public void mouseMoved(MouseEvent e) {

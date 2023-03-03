@@ -40,41 +40,6 @@ public class Player {
         xpos = xpos + dx;
         ypos = ypos + dy;
 
-        if(right == true) {
-            dx = 10;
-        } else if (left == true) {
-            dx = -10;
-        } else {
-            dx = 0;
-        }
-
-        if(down == true) {
-            dy = 10;
-        } else if (up == true) {
-            dy = -10;
-        } else {
-            dy = 0;
-        }
-
-        if (xpos > 1000 - width) {
-            xpos = 1000 - width;
-        }
-        if (ypos > 700 - height) {
-            ypos = 700 - height;
-        }
-        if (xpos < 500) {
-            xpos = 500;
-        }
-        if (ypos < 0) {
-            ypos = 0;
-        }
-        rec = new Rectangle(xpos, ypos, width, height);
-    }
-
-    public void move2() {
-        xpos = xpos + dx;
-        ypos = ypos + dy;
-
         if(right2 == true) {
             dx = 10;
         } else if (left2 == true) {
@@ -91,11 +56,46 @@ public class Player {
             dy = 0;
         }
 
+        if (xpos < 500) {
+            xpos = 500;
+        }
+        if (ypos > 700 - height/2) {
+            ypos = 700 - height/2;
+        }
+        if (xpos > 1000 - width) {
+            xpos = 1000 - width;
+        }
+        if (ypos < 0) {
+            ypos = 0;
+        }
+        rec = new Rectangle(xpos, ypos, width, height/2);
+    }
+
+    public void move2() {
+        xpos = xpos + dx;
+        ypos = ypos + dy;
+
+        if(right == true) {
+            dx = 10;
+        } else if (left == true) {
+            dx = -10;
+        } else {
+            dx = 0;
+        }
+
+        if(down == true) {
+            dy = 10;
+        } else if (up == true) {
+            dy = -10;
+        } else {
+            dy = 0;
+        }
+
         if (xpos > 500 - width) {
             xpos = 500 - width;
         }
-        if (ypos > 700 - height) {
-            ypos = 700 - height;
+        if (ypos > 700 - height/2) {
+            ypos = 700 - height/2;
         }
         if (xpos < 0) {
             xpos = 0;
@@ -103,7 +103,7 @@ public class Player {
         if (ypos < 0) {
             ypos = 0;
         }
-        rec = new Rectangle(xpos, ypos, width, height);
+        rec = new Rectangle(xpos, ypos, width, height/2);
     }
 
 }
