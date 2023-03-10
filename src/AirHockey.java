@@ -35,6 +35,7 @@ public class AirHockey implements KeyListener, MouseListener, MouseMotionListene
     public Player[] users;
 
     public SoundFile hitSound;
+    public SoundFile celebration;
 
     public static void main(String[] args) {
         AirHockey myApp = new AirHockey();
@@ -67,6 +68,7 @@ public class AirHockey implements KeyListener, MouseListener, MouseMotionListene
         }
 
         hitSound = new SoundFile("PaddleHit.wav");
+        celebration = new SoundFile("Celebration.wav");
 
         thePuck = new Puck(475, 325, 0, 0, puckPic);
     }
@@ -309,9 +311,11 @@ public class AirHockey implements KeyListener, MouseListener, MouseMotionListene
             g.drawString("GAME OVER", 330, 300);
             if (useronescore == 5){
                 g.drawString("Player One has Won " + useronescore + "-" + usertwoscore, 275, 400);
+                celebration.play();
             } else {
                 g.setColor(Color.RED);
                 g.drawString("Player Two has Won " + usertwoscore + "-" + useronescore, 275, 400);
+                celebration.play();
             }
         }
         g.dispose();
