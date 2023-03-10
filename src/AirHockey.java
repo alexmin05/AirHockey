@@ -85,7 +85,7 @@ public class AirHockey implements KeyListener, MouseListener, MouseMotionListene
             if (thePuck.rec.intersects(users[x].rec) && users[x].isCrashing == false) {
                 users[x].isCrashing = true;
                 hitSound.play();
-                if(users[x].dx == 0) {
+                if(users[x].dx == 0 && users[x].dy == 0) {
                     thePuck.dx = -thePuck.dx;
                     thePuck.dy = -thePuck.dy;
                 } else {
@@ -294,13 +294,11 @@ public class AirHockey implements KeyListener, MouseListener, MouseMotionListene
             for (int x = 0; x < users.length; x++) {
                 g.drawImage(users[x].pic, users[x].xpos, users[x].ypos, users[x].width, users[x].height, null);
             }
-            for (int x = 0; x < goals.length; x++) {
-            }
             g.setFont(new Font("Arial", Font.BOLD, 30));
             g.setColor(Color.BLUE);
-            g.drawString("" + useronescore, 440, 50);
+            g.drawString("" + (int)useronescore, 440, 50);
             g.setColor(Color.RED);
-            g.drawString("" + usertwoscore, 540, 50);
+            g.drawString("" + (int)usertwoscore, 540, 50);
         }
 
         if (gameEnd == true) {
@@ -310,11 +308,11 @@ public class AirHockey implements KeyListener, MouseListener, MouseMotionListene
             g.setFont(new Font ("Arial", Font.BOLD, 50));
             g.drawString("GAME OVER", 330, 300);
             if (useronescore == 5){
-                g.drawString("Player One has Won " + useronescore + "-" + usertwoscore, 275, 400);
+                g.drawString("Player One has Won " + (int)useronescore + "-" + (int)usertwoscore, 240, 400);
                 celebration.play();
             } else {
                 g.setColor(Color.RED);
-                g.drawString("Player Two has Won " + usertwoscore + "-" + useronescore, 275, 400);
+                g.drawString("Player Two has Won " + (int)usertwoscore + "-" + (int)useronescore, 240, 400);
                 celebration.play();
             }
         }
