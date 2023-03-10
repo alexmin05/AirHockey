@@ -15,8 +15,8 @@ public class Puck {
 
         xpos = pXpos;
         ypos = pYpos;
-        width = 100;
-        height = 100;
+        width = 50;
+        height = 50;
         dx = dxParameter;
         dy = dyParameter;
         pic = picParameter;
@@ -28,5 +28,19 @@ public class Puck {
     public void puckmove() {
         xpos = xpos + dx;
         ypos = ypos + dy;
+
+        if(xpos < 0) {
+            dx = -dx;
+        }
+        if(xpos > 1000 - width) {
+            dx = -dx;
+        }
+        if(ypos < 0) {
+            dy = -dy;
+        }
+        if(ypos < 700 - height) {
+            dy = -dy;
+        }
+        rec = new Rectangle(xpos, ypos, width, height);
     }
 }

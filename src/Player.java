@@ -21,13 +21,14 @@ public class Player {
     public boolean down2;
     public boolean left2;
     public boolean up2;
+    public boolean isCrashing = false;
 
     public Player(int pXpos, int pYpos, int dxParameter, int dyParameter, Image picParameter) {
 
         xpos = pXpos;
         ypos = pYpos;
-        width = 100;
-        height = 100;
+        width = 50;
+        height = 50;
         dx = dxParameter;
         dy = dyParameter;
         pic = picParameter;
@@ -59,8 +60,8 @@ public class Player {
         if (xpos < 500) {
             xpos = 500;
         }
-        if (ypos > 700 - height/2) {
-            ypos = 700 - height/2;
+        if (ypos > 700 - height) {
+            ypos = 700 - height;
         }
         if (xpos > 1000 - width) {
             xpos = 1000 - width;
@@ -68,7 +69,7 @@ public class Player {
         if (ypos < 0) {
             ypos = 0;
         }
-        rec = new Rectangle(xpos, ypos, width, height/2);
+        rec = new Rectangle(xpos, ypos, width, height);
     }
 
     public void move2() {
@@ -94,8 +95,8 @@ public class Player {
         if (xpos > 500 - width) {
             xpos = 500 - width;
         }
-        if (ypos > 700 - height/2) {
-            ypos = 700 - height/2;
+        if (ypos > 700 - height) {
+            ypos = 700 - height;
         }
         if (xpos < 0) {
             xpos = 0;
@@ -103,7 +104,7 @@ public class Player {
         if (ypos < 0) {
             ypos = 0;
         }
-        rec = new Rectangle(xpos, ypos, width, height/2);
+        rec = new Rectangle(xpos, ypos, width, height);
     }
 
 }
