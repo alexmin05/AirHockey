@@ -38,7 +38,7 @@ public class Puck {
         if(ypos < 0) {
             dy = -dy;
         }
-        if(ypos < 700 - height) {
+        if(ypos > 700 - height) {
             dy = -dy;
         }
         rec = new Rectangle(xpos, ypos, width, height);

@@ -28,14 +28,13 @@ public class AirHockey implements KeyListener, MouseListener, MouseMotionListene
     public boolean gameEnd = false;
 
     public int mouseX, mouseY;
-    public int useronescore;
-    public int usertwoscore;
+    public double useronescore;
+    public double usertwoscore;
 
     public Puck thePuck;
     public Player[] users;
 
     public SoundFile hitSound;
-    public SoundFile gameTheme;
 
     public static void main(String[] args) {
         AirHockey myApp = new AirHockey();
@@ -56,21 +55,20 @@ public class AirHockey implements KeyListener, MouseListener, MouseMotionListene
         paddlePic = Toolkit.getDefaultToolkit().getImage("paddlePic.png");
         airhockeyPic = Toolkit.getDefaultToolkit().getImage("airhockeyPic.png");
 
-        users = new Player[2];
+        users = new Player[2]; // array for users
         for (int x = 0; x < users.length; x = x + 1) {
-            users[x] = new Player(100 + x * 500, 350, 10, 10, paddlePic);
+            users[x] = new Player(100 + x * 700, 325, 10, 10, paddlePic);
         }
 
         startButton = new Button(425, 315, 150, 70, "Click Here to Start");
-        goals = new Button[2];
+        goals = new Button[2]; // array for goals
         for (int x = 0; x < goals.length; x = x + 1) {
-            goals[x] = new Button(0 + x * 995, 275, 5, 150, "");
+            goals[x] = new Button(0 + x * 995, 225, 5, 250, "");
         }
 
         hitSound = new SoundFile("PaddleHit.wav");
 
-        thePuck = new Puck(475, 350, 0, 0, puckPic);
-
+        thePuck = new Puck(475, 325, 0, 0, puckPic);
     }
 
     public void moveThings() {
@@ -85,8 +83,13 @@ public class AirHockey implements KeyListener, MouseListener, MouseMotionListene
             if (thePuck.rec.intersects(users[x].rec) && users[x].isCrashing == false) {
                 users[x].isCrashing = true;
                 hitSound.play();
-                thePuck.dx = users[x].dx;
-                thePuck.dy = users[x].dy;
+                if(users[x].dx == 0) {
+                    thePuck.dx = -thePuck.dx;
+                    thePuck.dy = -thePuck.dy;
+                } else {
+                    thePuck.dx = users[x].dx;
+                    thePuck.dy = users[x].dy;
+                }
             }
             if (!thePuck.rec.intersects(users[x].rec)) {
                 users[x].isCrashing = false;
@@ -94,34 +97,42 @@ public class AirHockey implements KeyListener, MouseListener, MouseMotionListene
         }
 
         for (int x = 0; x < goals.length; x = x + 1) {
-
-            if (thePuck.rec.intersects(goals[0].rec)) {
-                useronescore = useronescore + 1;
+            if (thePuck.rec.intersects(goals[0].rec) && goals[x].isCrashing == false) {
+                goals[x].isCrashing = true;
+                usertwoscore = usertwoscore + 0.5;
                 thePuck.dx = 0;
                 thePuck.dy = 0;
-                thePuck.xpos = 500 - thePuck.width / 2;
-                thePuck.ypos = 375 - thePuck.height / 2;
-                users[x].xpos = 100 + x * 500;
-                users[x].ypos = 350;
+                thePuck.xpos = 475;
+                thePuck.ypos = 325;
+                users[x].xpos = 100 + x * 700;
+                users[x].ypos = 325;
+            }
+            if (!thePuck.rec.intersects(goals[x].rec)) {
+                goals[x].isCrashing = false;
+            }
+
+            if (thePuck.rec.intersects(goals[1].rec) && goals[x].isCrashing == false) {
+                goals[x].isCrashing = true;
+                useronescore = useronescore + 0.5;
+                thePuck.dx = 0;
+                thePuck.dy = 0;
+                thePuck.xpos = 475;
+                thePuck.ypos = 325;
+                users[x].xpos = 100 + x * 700;
+                users[x].ypos = 325;
+            }
+            if (!thePuck.rec.intersects(goals[x].rec)) {
+                goals[x].isCrashing = false;
             }
 
             if (useronescore == 5) {
                 gameEnd = true;
             }
-
-            if (thePuck.rec.intersects(goals[1].rec)) {
-                usertwoscore = usertwoscore + 1;
-                thePuck.dx = 0;
-                thePuck.dy = 0;
-                thePuck.xpos = 500 - thePuck.width / 2;
-                thePuck.ypos = 375 - thePuck.height / 2;
-                users[x].xpos = 100 + x * 500;
-                users[x].ypos = 350;
+            if (usertwoscore == 5) {
+                gameEnd = true;
             }
-
         }
     }
-
 
     public void run() {
         while (true) {
@@ -131,50 +142,6 @@ public class AirHockey implements KeyListener, MouseListener, MouseMotionListene
             pause(20);
         }
     }
-
-    public void render() {
-        Graphics2D g = (Graphics2D) bufferStrategy.getDrawGraphics();
-        g.clearRect(0, 0, WIDTH, HEIGHT);
-        g.drawImage(airhockeyPic,0,0, WIDTH, HEIGHT, null);
-        System.out.println(gameStart);
-
-        if (gameStart == false) {
-            g.setColor(Color.WHITE);
-            g.fillRect(0, 0, 1000, 700);
-            g.setColor(Color.BLUE);
-            g.fillRect(startButton.xpos, startButton.ypos, startButton.width, startButton.height);
-            g.setColor(Color.ORANGE);
-            g.drawString(startButton.text, startButton.xpos + 20, startButton.ypos + 40);
-        }
-        else {
-            g.drawImage(thePuck.pic, thePuck.xpos, thePuck.ypos, thePuck.width, thePuck.height, null);
-            for (int x = 0; x < users.length; x++) {
-                g.drawImage(users[x].pic, users[x].xpos, users[x].ypos, users[x].width, users[x].height, null);
-                g.drawRect(users[x].rec.x, users[x].rec.y, users[x].rec.width, users[x].rec.height);
-            }
-            g.drawRect(thePuck.rec.x, thePuck.rec.y, thePuck.rec.width, thePuck.rec.height);
-            g.setFont(new Font("Arial", Font.BOLD, 30));
-            g.setColor(Color.BLUE);
-            g.drawString("" + useronescore, 440, 50);
-            g.setColor(Color.RED);
-            g.drawString("" + usertwoscore, 540, 50);
-        }
-
-        if (gameEnd == true) {
-            g.setColor(Color.WHITE);
-            g.fillRect(0,0, 1000, 700);
-            g.setColor(Color.BLUE);
-            g.setFont(new Font ("Arial", Font.BOLD, 50));
-            g.drawString("GAME OVER", 330, 300);
-            if (useronescore == 5){
-
-            } else {
-
-            }
-        }
-        g.dispose();
-        bufferStrategy.show();
-}
 
     public void keyPressed(KeyEvent event) {
         char key = event.getKeyChar();
@@ -205,8 +172,6 @@ public class AirHockey implements KeyListener, MouseListener, MouseMotionListene
         if (keyCode == 40) {
             users[1].down2 = true;
         }
-
-
     }
 
     public void keyReleased(KeyEvent event) {
@@ -306,6 +271,51 @@ public class AirHockey implements KeyListener, MouseListener, MouseMotionListene
         } catch (InterruptedException e) {
 
         }
+    }
+
+    public void render() {
+        Graphics2D g = (Graphics2D) bufferStrategy.getDrawGraphics();
+        g.clearRect(0, 0, WIDTH, HEIGHT);
+        g.drawImage(airhockeyPic,0,0, WIDTH, HEIGHT, null);
+        System.out.println(gameStart);
+
+        if (gameStart == false) {
+            g.setColor(Color.WHITE);
+            g.fillRect(0, 0, 1000, 700);
+            g.setColor(Color.BLUE);
+            g.fillRect(startButton.xpos, startButton.ypos, startButton.width, startButton.height);
+            g.setColor(Color.ORANGE);
+            g.drawString(startButton.text, startButton.xpos + 20, startButton.ypos + 40);
+        }
+        else {
+            g.drawImage(thePuck.pic, thePuck.xpos, thePuck.ypos, thePuck.width, thePuck.height, null);
+            for (int x = 0; x < users.length; x++) {
+                g.drawImage(users[x].pic, users[x].xpos, users[x].ypos, users[x].width, users[x].height, null);
+            }
+            for (int x = 0; x < goals.length; x++) {
+            }
+            g.setFont(new Font("Arial", Font.BOLD, 30));
+            g.setColor(Color.BLUE);
+            g.drawString("" + useronescore, 440, 50);
+            g.setColor(Color.RED);
+            g.drawString("" + usertwoscore, 540, 50);
+        }
+
+        if (gameEnd == true) {
+            g.setColor(Color.WHITE);
+            g.fillRect(0,0, 1000, 700);
+            g.setColor(Color.BLUE);
+            g.setFont(new Font ("Arial", Font.BOLD, 50));
+            g.drawString("GAME OVER", 330, 300);
+            if (useronescore == 5){
+                g.drawString("Player One has Won " + useronescore + "-" + usertwoscore, 275, 400);
+            } else {
+                g.setColor(Color.RED);
+                g.drawString("Player Two has Won " + usertwoscore + "-" + useronescore, 275, 400);
+            }
+        }
+        g.dispose();
+        bufferStrategy.show();
     }
 }
 

@@ -42,17 +42,17 @@ public class Player {
         ypos = ypos + dy;
 
         if(right2 == true) {
-            dx = 10;
+            dx = 12;
         } else if (left2 == true) {
-            dx = -10;
+            dx = -12;
         } else {
             dx = 0;
         }
 
         if(down2 == true) {
-            dy = 10;
+            dy = 12;
         } else if (up2 == true) {
-            dy = -10;
+            dy = -12;
         } else {
             dy = 0;
         }
@@ -77,17 +77,17 @@ public class Player {
         ypos = ypos + dy;
 
         if(right == true) {
-            dx = 10;
+            dx = 12;
         } else if (left == true) {
-            dx = -10;
+            dx = -12;
         } else {
             dx = 0;
         }
 
         if(down == true) {
-            dy = 10;
+            dy = 12;
         } else if (up == true) {
-            dy = -10;
+            dy = -12;
         } else {
             dy = 0;
         }

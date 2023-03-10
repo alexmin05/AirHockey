@@ -9,6 +9,7 @@ public class Button {
     public int height;
     public Rectangle rec;			//declare a rectangle variable
     public String text;
+    public boolean isCrashing = false;
 
     public Button(int xParameter, int yParameter, int widthParameter, int heightParameter, String textParameter)
     {
